@@ -11,7 +11,8 @@ class UsersRepository implements IUsersRepository {
   }
 
   public static getInstance(): UsersRepository {
-    if (!UsersRepository.INSTANCE) {
+    if (!UsersRepository.INSTANCE)
+    {
       UsersRepository.INSTANCE = new UsersRepository();
     }
 
@@ -19,23 +20,41 @@ class UsersRepository implements IUsersRepository {
   }
 
   create({ name, email }: ICreateUserDTO): User {
-    // Complete aqui
+    const user = new User();
+
+    Object.assign(user, {
+      name,
+      email,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    this.users.push(user);
+
+    return user;
   }
 
   findById(id: string): User | undefined {
-    // Complete aqui
+    const user = this.users.find((userId) => userId.id === id);
+    return user;
   }
 
   findByEmail(email: string): User | undefined {
-    // Complete aqui
+    const user = this.users.find((userEmail) => userEmail.email === email);
+    return user;
   }
 
   turnAdmin(receivedUser: User): User {
-    // Complete aqui
+    const updatedUser = this.findById(receivedUser.id);
+
+    updatedUser.admin = true;
+    updatedUser.updated_at = new Date();
+
+    return updatedUser;
   }
 
   list(): User[] {
-    // Complete aqui
+    return this.users;
   }
 }
 
